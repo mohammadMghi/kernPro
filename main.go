@@ -1,0 +1,68 @@
+package kernpro
+
+ 
+
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	readProccess()
+	cpuUtilization()
+}
+
+
+
+func readProccess(){
+
+		// Read the contents of the "/proc" directory
+		procDir := "/proc"
+		files, err := ioutil.ReadDir(procDir)
+		if err != nil {
+			fmt.Println("Failed to read /proc directory:", err)
+			os.Exit(1)
+		}
+	
+		// Iterate over the directory entries
+		for _, file := range files {
+			// Check if the entry is a directory with a numeric name (representing a process)
+			if file.IsDir() {
+				pid, err := strconv.Atoi(file.Name())
+				if err != nil {
+					continue
+				}
+	
+				// Read the process status file to get information about the process
+				statusFilePath := fmt.Sprintf("%s/%d/status", procDir, pid)
+				status, err := ioutil.ReadFile(statusFilePath)
+				if err != nil {
+					continue
+				}
+	
+				// Extract the process name from the status file
+				name := extractProcessName(status)
+	
+				// Print the process ID and name
+				fmt.Printf("PID: %d, Name: %s\n", pid, name)
+			}
+		}
+}
+
+// Extracts the process name from the status file contents
+func extractProcessName(status []byte) string {
+	lines := strings.Split(string(status), "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "Name:") {
+			fields := strings.Fields(line)
+			if len(fields) >= 2 {
+				return fields[1]
+			}
+			break
+		}
+	}
+	return ""
+}
