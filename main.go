@@ -1,4 +1,4 @@
-package kernpro
+package main
 
  
 
@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	readProccess()
+	//readProccess()
 	cpuUtilization()
 }
 

@@ -1,4 +1,4 @@
-package kernpro
+package main
 
 
 import (
