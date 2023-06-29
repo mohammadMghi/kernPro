@@ -3,14 +3,14 @@ package cpu
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
-	"os/signal"
-	"runtime"
-	"runtime/pprof"
+	"sync"
+
 	"strconv"
-	"syscall"
+
 	"time"
+
+	"google.golang.org/appengine/runtime"
 )
 
 
@@ -105,43 +105,30 @@ func (c *cpu) getCPUUsage() int64 {
 }
 
 
-func(c *cpu) ShowHeavyProccess(){
-		// Create a CPU profile file
-		cpuProfileFile, err := os.Create("cpu_profile.prof")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer cpuProfileFile.Close()
-	
-		// Start CPU profiling
-		err = pprof.StartCPUProfile(cpuProfileFile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer pprof.StopCPUProfile()
-	
-		// Register signal handler to stop profiling on interrupt
-		sigChan := make(chan os.Signal, 1)
-		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-		go func() {
-			<-sigChan
-			pprof.StopCPUProfile()
-			os.Exit(0)
-		}()
-	
-		// Simulate some heavy processing
-		for i := 0; i < 5; i++ {
-			heavyFunction()
-			time.Sleep(time.Second)
-		}
-	
-		// Stop profiling and exit
-		pprof.StopCPUProfile()
-}
+func (c *cpu)HeavyFunction(wg *sync.WaitGroup) {
+	defer wg.Done()
 
-func heavyFunction() {
 	// Simulate a heavy computation
 	for i := 0; i < 1000000000; i++ {
 		_ = i * i
+	}
+}
+
+func (c *cpu)PrintHeavyProcesses() {
+	// Get the current Goroutine count
+	numGoroutines := runtime.NumGoroutine()
+
+	// Create a slice to store Goroutine IDs
+	goroutineIDs := make([]int64, numGoroutines)
+
+	// Capture the Goroutine IDs
+	n := runtime.Getgoroutines(&goroutineIDs[0], true)
+
+	// Print the Goroutine IDs and their CPU usage
+	for i := 0; i < n; i++ {
+		goid := goroutineIDs[i]
+		cpuUsage := runtime.CPUProfilePercent(goid)
+
+		fmt.Printf("Goroutine ID: %d, CPU Usage: %.2f%%\n", goid, cpuUsage)
 	}
 }

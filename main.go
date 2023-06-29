@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
- 
+	"sync"
+	"time"
+
 	"strconv"
 	"strings"
+
 	cpu "github.com/mohammadMghi/kernPro/cpu"
 )
 
@@ -31,7 +34,25 @@ func main() {
 	}
 
 	if *flagString == "cpu_h"{
-		cpu.ShowHeavyProccess()
+		var wg sync.WaitGroup
+
+		// Start some heavy processing goroutines
+		for i := 0; i < 5; i++ {
+			wg.Add(1)
+			go cpu.HeavyFunction(&wg)
+		}
+	
+		// Print the heavy processes every second
+		ticker := time.NewTicker(time.Second)
+		defer ticker.Stop()
+	
+		for range ticker.C {
+			fmt.Println("Printing heavy processes:")
+			cpu.PrintHeavyProcesses()
+		}
+	
+		// Wait for the goroutines to finish
+		wg.Wait()
  
 		return
 	}
