@@ -3,9 +3,13 @@ package cpu
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"os/signal"
 	"runtime"
+	"runtime/pprof"
 	"strconv"
+	"syscall"
 	"time"
 )
 
@@ -98,4 +102,46 @@ func (c *cpu) getCPUUsage() int64 {
 	var s runtime.MemStats
 	runtime.ReadMemStats(&s)
 	return int64(s.Sys)
+}
+
+
+func(c *cpu) ShowHeavyProccess(){
+		// Create a CPU profile file
+		cpuProfileFile, err := os.Create("cpu_profile.prof")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer cpuProfileFile.Close()
+	
+		// Start CPU profiling
+		err = pprof.StartCPUProfile(cpuProfileFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer pprof.StopCPUProfile()
+	
+		// Register signal handler to stop profiling on interrupt
+		sigChan := make(chan os.Signal, 1)
+		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+		go func() {
+			<-sigChan
+			pprof.StopCPUProfile()
+			os.Exit(0)
+		}()
+	
+		// Simulate some heavy processing
+		for i := 0; i < 5; i++ {
+			heavyFunction()
+			time.Sleep(time.Second)
+		}
+	
+		// Stop profiling and exit
+		pprof.StopCPUProfile()
+}
+
+func heavyFunction() {
+	// Simulate a heavy computation
+	for i := 0; i < 1000000000; i++ {
+		_ = i * i
+	}
 }

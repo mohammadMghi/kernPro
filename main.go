@@ -30,7 +30,11 @@ func main() {
 		return
 	}
 
-	
+	if *flagString == "cpu_h"{
+		cpu.ShowHeavyProccess()
+ 
+		return
+	}
 
 
 	fmt.Printf("Please set a flag like k=cpu for checking cpu utilization ...");
