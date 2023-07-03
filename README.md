@@ -5,5 +5,5 @@ KernPro is a tool that assists you in interacting with the kernel and logging co
 First of all clone the project then run project by bellow command :
 
 ```
-$ go run main.go k=cpu // For get state of cpu
+$ go run main.go type=cpu // For get state of cpu
 ```
