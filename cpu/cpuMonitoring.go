@@ -3,14 +3,18 @@ package cpu
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
+	"runtime"
+	"strings"
+	"syscall"
+
 	"sync"
 
 	"strconv"
 
 	"time"
-
-	"google.golang.org/appengine/runtime"
 )
 
 
@@ -115,20 +119,45 @@ func (c *cpu)HeavyFunction(wg *sync.WaitGroup) {
 }
 
 func (c *cpu)PrintHeavyProcesses() {
-	// Get the current Goroutine count
-	numGoroutines := runtime.NumGoroutine()
+	// Execute the 'ps aux' command to retrieve information about all processes
+	cmd := exec.Command("ps", "aux")
 
-	// Create a slice to store Goroutine IDs
-	goroutineIDs := make([]int64, numGoroutines)
-
-	// Capture the Goroutine IDs
-	n := runtime.Getgoroutines(&goroutineIDs[0], true)
-
-	// Print the Goroutine IDs and their CPU usage
-	for i := 0; i < n; i++ {
-		goid := goroutineIDs[i]
-		cpuUsage := runtime.CPUProfilePercent(goid)
-
-		fmt.Printf("Goroutine ID: %d, CPU Usage: %.2f%%\n", goid, cpuUsage)
+	// Run the command and capture the output
+	output, err := cmd.Output()
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	// Split the output into lines
+	lines := strings.Split(string(output), "\n")
+
+	// Print the header
+	fmt.Println(lines[0])
+
+	// Print the heavy processes
+	for _, line := range lines[1:] {
+		if strings.TrimSpace(line) != "" {
+			fmt.Println(line)
+		}
+	}
+}
+
+func(c *cpu) PrintProcessState(ID  string){
+	// Get the process ID of the target process
+	pid := 1234 // Replace with the actual process ID
+
+	// Open the process using the process ID
+	process, err := os.FindProcess(pid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Retrieve the process state
+	state, err := process.Signal(syscall.Signal(0)).to
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Print the process state
+	fmt.Println("Process state:", state)
 }

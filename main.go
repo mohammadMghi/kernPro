@@ -33,26 +33,9 @@ func main() {
 		return
 	}
 
-	if *flagString == "cpu_h"{
-		var wg sync.WaitGroup
-
-		// Start some heavy processing goroutines
-		for i := 0; i < 5; i++ {
-			wg.Add(1)
-			go cpu.HeavyFunction(&wg)
-		}
-	
-		// Print the heavy processes every second
-		ticker := time.NewTicker(time.Second)
-		defer ticker.Stop()
-	
-		for range ticker.C {
-			fmt.Println("Printing heavy processes:")
-			cpu.PrintHeavyProcesses()
-		}
-	
-		// Wait for the goroutines to finish
-		wg.Wait()
+	if *flagString == "cpu_heavy"{
+		
+		cpu.PrintHeavyProcesses()
  
 		return
 	}
