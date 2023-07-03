@@ -16,7 +16,8 @@ import (
 
 func main() {
 
-	flagString := flag.String("k", "", "Specify a string flag")
+	flagString := flag.String("type", "", "This flag is for determin which part of application you wnat to use")
+	processId := flag.Int("pid", -1, "Specify a string flag")
 
 	flag.Parse()
 
@@ -39,6 +40,13 @@ func main() {
  
 		return
 	}
+
+	if *flagString == "process_state" && *processId != -1{
+		
+		cpu.PrintProcessState(*processId)
+
+		return
+	} 
 
 
 	fmt.Printf("Please set a flag like k=cpu for checking cpu utilization ...");

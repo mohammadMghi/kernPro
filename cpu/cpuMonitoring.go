@@ -3,6 +3,7 @@ package cpu
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -142,22 +143,33 @@ func (c *cpu)PrintHeavyProcesses() {
 	}
 }
 
-func(c *cpu) PrintProcessState(ID  string){
-	// Get the process ID of the target process
-	pid := 1234 // Replace with the actual process ID
+func(c *cpu) PrintProcessState(pid  int){
+	// Define the process ID (PID) of the target process
+ 
 
-	// Open the process using the process ID
-	process, err := os.FindProcess(pid)
+	// Read the process status file in the /proc directory
+	status, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/status", pid))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Retrieve the process state
-	state, err := process.Signal(syscall.Signal(0)).to
-	if err != nil {
-		log.Fatal(err)
-	}
+	// Parse the process state from the status file
+	state := parseProcessState(string(status))
 
 	// Print the process state
 	fmt.Println("Process state:", state)
+}
+
+// Parse the process state from the status file content
+func parseProcessState(status string) string {
+	lines := strings.Split(status, "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "State:") {
+			fields := strings.Fields(line)
+			if len(fields) > 1 {
+				return fields[1]
+			}
+		}
+	}
+	return ""
 }
