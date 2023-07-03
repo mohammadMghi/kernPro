@@ -4,9 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
-	"sync"
-	"time"
 
 	"strconv"
 	"strings"
@@ -17,7 +16,8 @@ import (
 func main() {
 
 	flagString := flag.String("type", "", "This flag is for determin which part of application you wnat to use")
-	processId := flag.Int("pid", -1, "Specify a string flag")
+	pid := flag.String("pid", "-1", "Specify a string flag")
+ 
 
 	flag.Parse()
 
@@ -41,12 +41,21 @@ func main() {
 		return
 	}
 
-	if *flagString == "process_state" && *processId != -1{
+	if *flagString == "process_state" && *pid != "-1"{
 		
-		cpu.PrintProcessState(*processId)
+		cpu.PrintProcessState(*pid)
 
 		return
 	} 
+
+	if *flagString == "process_child" && *pid != "-1"{
+		num, err := strconv.Atoi(*pid)
+		if err != nil{
+			log.Fatal(err.Error())
+
+		}
+		cpu.PrintProcessChild(num)
+	}
 
 
 	fmt.Printf("Please set a flag like k=cpu for checking cpu utilization ...");

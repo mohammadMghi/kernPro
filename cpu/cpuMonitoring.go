@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
+
 	"log"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
-	"syscall"
 
 	"sync"
 
@@ -143,21 +143,36 @@ func (c *cpu)PrintHeavyProcesses() {
 	}
 }
 
-func(c *cpu) PrintProcessState(pid  int){
-	// Define the process ID (PID) of the target process
+func(c *cpu) PrintProcessState(pid  string){
+ 
  
 
-	// Read the process status file in the /proc directory
-	status, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/status", pid))
+	// Execute the 'ps -p <pid> -o pid,ppid,cmd' command to get process information
+	cmd := exec.Command("ps", "-p", pid, "-o", "pid,ppid,cmd")
+
+	// Run the command and capture the output
+	output, err := cmd.Output()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Parse the process state from the status file
-	state := parseProcessState(string(status))
+	// Split the output into lines
+	lines := strings.Split(string(output), "\n")
 
-	// Print the process state
-	fmt.Println("Process state:", state)
+	// Extract the process information from the output
+	if len(lines) > 1 {
+		fields := strings.Fields(lines[1])
+		if len(fields) == 3 {
+			processID := fields[0]
+			parentProcessID := fields[1]
+			command := fields[2]
+			fmt.Println("Process ID:", processID)
+			fmt.Println("Parent Process ID:", parentProcessID)
+			fmt.Println("Command:", command)
+		}
+	} else {
+		fmt.Println("Process not found")
+	}
 }
 
 // Parse the process state from the status file content
@@ -172,4 +187,55 @@ func parseProcessState(status string) string {
 		}
 	}
 	return ""
+}
+
+
+func (c *cpu) PrintProcessChild(processId int){
+ 
+
+	// Get the list of processes in the /proc directory
+	processes, err := ioutil.ReadDir("/proc")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Iterate over the processes and find the child processes of the parent PID
+	childPIDs := make([]int, 0)
+	for _, process := range processes {
+		if process.IsDir() {
+			// Check if the process directory name is a valid PID
+			pid, err := strconv.Atoi(process.Name())
+			if err == nil && isChildProcess(pid, processId) {
+				childPIDs = append(childPIDs, pid)
+			}
+		}
+	}
+
+	// Print the child process IDs
+	fmt.Println("Child Processes:")
+	for _, childPID := range childPIDs {
+		fmt.Println(childPID)
+	}
+}
+
+
+// Check if the given PID is a child process of the parent PID
+func isChildProcess(pid, parentPID int) bool {
+	// Read the stat file of the process to get its parent PID
+	statFile := fmt.Sprintf("/proc/%d/stat", pid)
+	statData, err := ioutil.ReadFile(statFile)
+	if err != nil {
+		return false
+	}
+
+	// Extract the parent PID from the stat file data
+	statFields := strings.Fields(string(statData))
+	if len(statFields) > 3 {
+		ppid, err := strconv.Atoi(statFields[3])
+		if err == nil && ppid == parentPID {
+			return true
+		}
+	}
+
+	return false
 }
