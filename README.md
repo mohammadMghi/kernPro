@@ -47,13 +47,10 @@ For print logs of child process use :
 ```
 $ go run main.go -type=process_child -pid=x
 ```
-
-
-
-
-
-
-
+For print logs of system process :
+```
+$ go run main.go -type=sys_process
+```
 
 
 
