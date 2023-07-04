@@ -57,6 +57,10 @@ func main() {
 		cpu.PrintProcessChild(num)
 	}
 
+	if *flagString == "sys_process" {
+		cpu.PrintSysProcess()
+	}
+
 
 	fmt.Printf("Please set a flag like k=cpu for checking cpu utilization ...");
 

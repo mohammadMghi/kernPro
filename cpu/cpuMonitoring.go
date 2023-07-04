@@ -239,3 +239,18 @@ func isChildProcess(pid, parentPID int) bool {
 
 	return false
 }
+
+func (c *cpu)PrintSysProcess(){
+	// Run the 'ps' command with the appropriate arguments to list system processes
+	cmd := exec.Command("ps", "-ef")
+
+	// Capture the output of the command
+	output, err := cmd.Output()
+	if err != nil {
+		fmt.Println("Error executing command:", err)
+		return
+	}
+
+	// Print the output
+	fmt.Println(string(output))
+}
