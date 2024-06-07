@@ -40,12 +40,12 @@ $ go run main.go -type=cpu_heavy
 
 For print logs of process state with pid :
 ```
-$ go run main.go -type=process_state -pid=x
+$ go run main.go -type=process_state -pid=x //replace your pid with x
 ```
 
 For print logs of child process use :
 ```
-$ go run main.go -type=process_child -pid=x
+$ go run main.go -type=process_child -pid=x //replace your pid with x
 ```
 For print logs of system process :
 ```
