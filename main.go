@@ -11,6 +11,8 @@ import (
 	"strings"
 
 	cpu "github.com/mohammadMghi/kernPro/cpu"
+
+	syslog "github.com/mohammadMghi/kernPro/Log"
 )
 
 func main() {
@@ -22,6 +24,16 @@ func main() {
 	flag.Parse()
 
 	cpu := cpu.NewCpu()
+
+	if(*flagString == "log"){
+		filepath := "/var/log/kern.log" 
+		logContents, err := syslog.ReadKernelLogFile(filepath)
+		if err != nil {
+			log.Fatalf("Failed to read kernel log file: %v", err)
+		} 
+	
+		fmt.Println(logContents)
+	}
 
 	if(*flagString == "process"){
 		readProccess()
