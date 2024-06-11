@@ -51,6 +51,10 @@ For print logs of system process :
 ```
 $ go run main.go -type=sys_process
 ```
+For print logs of /var/log/kernel.log use following :
+```
+go run main.go -type=log
+```
 
 
 
