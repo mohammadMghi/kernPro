@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"strconv"
 	"strings"
@@ -28,10 +29,16 @@ func main() {
 	if(*flagString == "log"){
 		filepath := "/var/log/kern.log" 
 		logContents, err := syslog.ReadKernelLogFile(filepath)
+
 		if err != nil {
 			log.Fatalf("Failed to read kernel log file: %v", err)
 		} 
-	
+		
+		currentTime := time.Now().Format("2006-01-02 15:04:05")
+		
+		//write log on on file
+		syslog.WriteToFile("logfile-" + currentTime + ".txt" ,logContents)
+		
 		fmt.Println(logContents)
 	}
 
