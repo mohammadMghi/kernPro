@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"time"
 
 	"strconv"
@@ -37,9 +38,19 @@ func main() {
 		currentTime := time.Now().Format("2006-01-02 15:04:05")
 		
 		//write log on on file
-		syslog.WriteToFile("logfile-" + currentTime + ".txt" ,logContents)
+		syslog.WriteToFile("logfile-kern_" + currentTime + ".txt" ,logContents)
 		
-		fmt.Println(logContents)
+		fmt.Println("/var/log/kern.log saved on the logFiles folder on the root")
+
+
+		cmd := exec.Command("tail"  , "/var/log/syslog")
+		output, err := cmd.Output()
+		if err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			syslog.WriteToFile("logfile-logsys_" + currentTime + ".txt" ,string(output))
+	 
+		}
 	}
 
 	if(*flagString == "process"){
