@@ -60,6 +60,14 @@ func main() {
 			syslog.WriteToFile("logfile-auth_" + currentTime + ".txt" ,string(output))
 	 
 		}
+		cmd  = exec.Command("/bin/sh" , "-c" ,"tail"  , "/var/log/boot.log")
+		output, err  = cmd.Output()
+		if err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			syslog.WriteToFile("logfile-boot_" + currentTime + ".txt" ,string(output))
+	 
+		}
 	}
 
 	if(*flagString == "process"){
