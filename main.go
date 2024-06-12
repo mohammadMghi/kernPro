@@ -19,7 +19,7 @@ import (
 
 func main() {
 
-	flagString := flag.String("type", "", "This flag is for determin which part of application you wnat to use")
+	typeFlag := flag.String("type", "", "This flag is for determin which part of application you wnat to use")
 	pid := flag.String("pid", "-1", "Specify a string flag")
  
 
@@ -27,7 +27,7 @@ func main() {
 
 	cpu := cpu.NewCpu()
 
-	if(*flagString == "log"){
+	if(*typeFlag == "log"){
 		filepath := "/var/log/kern.log" 
 		logContents, err := syslog.ReadKernelLogFile(filepath)
 
@@ -70,32 +70,32 @@ func main() {
 		}
 	}
 
-	if(*flagString == "process"){
+	if(*typeFlag == "process"){
 		readProccess()
 		return
 	}
 	
-	if *flagString == "cpu"{
+	if *typeFlag == "cpu"{
 		cpu.CpuUtilization()
  
 		return
 	}
 
-	if *flagString == "cpu_heavy"{
+	if *typeFlag == "cpu_heavy"{
 		
 		cpu.PrintHeavyProcesses()
  
 		return
 	}
 
-	if *flagString == "process_state" && *pid != "-1"{
+	if *typeFlag == "process_state" && *pid != "-1"{
 		
 		cpu.PrintProcessState(*pid)
 
 		return
 	} 
 
-	if *flagString == "process_child" && *pid != "-1"{
+	if *typeFlag == "process_child" && *pid != "-1"{
 		num, err := strconv.Atoi(*pid)
 		if err != nil{
 			log.Fatal(err.Error())
@@ -104,7 +104,7 @@ func main() {
 		cpu.PrintProcessChild(num)
 	}
 
-	if *flagString == "sys_process" {
+	if *typeFlag == "sys_process" {
 		cpu.PrintSysProcess()
 	}
 
