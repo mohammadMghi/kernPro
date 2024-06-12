@@ -1,0 +1,10 @@
+Jun 12 13:17:26 mohammad-ROG-Strix-G512LI-G512LI tracker-extract[99589]: Setting priority nice level to 19
+Jun 12 13:17:26 mohammad-ROG-Strix-G512LI-G512LI dbus-daemon[6044]: [session uid=1000 pid=6044] Successfully activated service 'org.freedesktop.Tracker1.Miner.Extract'
+Jun 12 13:17:26 mohammad-ROG-Strix-G512LI-G512LI systemd[6032]: Started Tracker metadata extractor.
+Jun 12 13:17:37 mohammad-ROG-Strix-G512LI-G512LI systemd[6032]: tracker-extract.service: Succeeded.
+Jun 12 13:17:49 mohammad-ROG-Strix-G512LI-G512LI dbus-daemon[6044]: apparmor="DENIED" operation="dbus_signal"  bus="session" path="/com/canonical/unity/launcherentry/TelegramDesktop" interface="com.canonical.Unity.LauncherEntry" member="Update" mask="send" name="org.freedesktop.DBus" pid=9167 label="snap.telegram-desktop.telegram-desktop" peer_pid=6409 peer_label="unconfined"
+Jun 12 13:17:55 mohammad-ROG-Strix-G512LI-G512LI kernel: [ 1437.994139] [UFW BLOCK] IN=wlo1 OUT= MAC=40:ec:99:f4:f4:e8:74:da:da:66:14:19:08:00 SRC=192.168.1.1 DST=224.0.0.1 LEN=32 TOS=0x00 PREC=0x00 TTL=1 ID=60214 DF PROTO=2 
+Jun 12 13:17:57 mohammad-ROG-Strix-G512LI-G512LI tracker-store[94656]: OK
+Jun 12 13:17:57 mohammad-ROG-Strix-G512LI-G512LI systemd[6032]: tracker-store.service: Succeeded.
+Jun 12 13:18:04 mohammad-ROG-Strix-G512LI-G512LI ntpd[1705]: Soliciting pool server 2606:4700:f1::123
+Jun 12 13:18:05 mohammad-ROG-Strix-G512LI-G512LI ntpd[1705]: Soliciting pool server 2620:2d:4000:1::3f

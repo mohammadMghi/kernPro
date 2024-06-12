@@ -1,0 +1,10 @@
+Jun 12 12:55:35 mohammad-ROG-Strix-G512LI-G512LI PackageKit: uid 1000 is trying to obtain org.freedesktop.packagekit.system-sources-refresh auth (only_trusted:0)
+Jun 12 12:55:35 mohammad-ROG-Strix-G512LI-G512LI PackageKit: uid 1000 obtained auth for org.freedesktop.packagekit.system-sources-refresh
+Jun 12 12:55:35 mohammad-ROG-Strix-G512LI-G512LI PackageKit: uid 1000 is trying to obtain org.freedesktop.packagekit.system-sources-refresh auth (only_trusted:0)
+Jun 12 12:55:35 mohammad-ROG-Strix-G512LI-G512LI PackageKit: uid 1000 obtained auth for org.freedesktop.packagekit.system-sources-refresh
+Jun 12 12:58:22 mohammad-ROG-Strix-G512LI-G512LI pkexec: pam_unix(polkit-1:session): session opened for user root by (uid=1000)
+Jun 12 12:58:22 mohammad-ROG-Strix-G512LI-G512LI pkexec[26804]: mohammad: Executing command [USER=root] [TTY=unknown] [CWD=/home/mohammad] [COMMAND=/usr/lib/update-notifier/package-system-locked]
+Jun 12 13:09:01 mohammad-ROG-Strix-G512LI-G512LI CRON[67210]: pam_unix(cron:session): session opened for user root by (uid=0)
+Jun 12 13:09:01 mohammad-ROG-Strix-G512LI-G512LI CRON[67210]: pam_unix(cron:session): session closed for user root
+Jun 12 13:17:01 mohammad-ROG-Strix-G512LI-G512LI CRON[97169]: pam_unix(cron:session): session opened for user root by (uid=0)
+Jun 12 13:17:01 mohammad-ROG-Strix-G512LI-G512LI CRON[97169]: pam_unix(cron:session): session closed for user root

@@ -51,6 +51,15 @@ func main() {
 			syslog.WriteToFile("logfile-logsys_" + currentTime + ".txt" ,string(output))
 	 
 		}
+
+		cmd  = exec.Command("tail"  , "/var/log/auth.log")
+		output, err  = cmd.Output()
+		if err != nil {
+			fmt.Println("Error:", err)
+		} else {
+			syslog.WriteToFile("logfile-auth_" + currentTime + ".txt" ,string(output))
+	 
+		}
 	}
 
 	if(*flagString == "process"){
